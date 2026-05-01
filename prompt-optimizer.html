@@ -1,0 +1,374 @@
+--- prompt-optimizer.html (原始)
+
+
++++ prompt-optimizer.html (修改后)
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt 优化器 - 让 AI 更懂你的需求</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-section label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .output-section label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .tips {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+
+        .tips h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .tips ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Prompt 优化器</h1>
+            <p>让 AI 更精准地理解你的需求，提升工作效率</p>
+        </div>
+
+        <div class="content">
+            <div class="input-section">
+                <label for="originalPrompt">原始 Prompt：</label>
+                <textarea
+                    id="originalPrompt"
+                    placeholder="请输入你想要优化的 Prompt，例如：帮我写一份产品文档"
+                ></textarea>
+            </div>
+
+            <div class="options">
+                <div class="option-group">
+                    <label for="taskType">任务类型：</label>
+                    <select id="taskType">
+                        <option value="general">通用任务</option>
+                        <option value="writing">文案写作</option>
+                        <option value="analysis">数据分析</option>
+                        <option value="coding">代码开发</option>
+                        <option value="design">设计方案</option>
+                        <option value="marketing">营销策划</option>
+                        <option value="research">行业研究</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label for="tone">语气风格：</label>
+                    <select id="tone">
+                        <option value="professional">专业严谨</option>
+                        <option value="friendly">友好亲切</option>
+                        <option value="concise">简洁明了</option>
+                        <option value="detailed">详细全面</option>
+                        <option value="creative">创意活泼</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label for="outputFormat">输出格式：</label>
+                    <select id="outputFormat">
+                        <option value="text">纯文本</option>
+                        <option value="markdown">Markdown</option>
+                        <option value="table">表格</option>
+                        <option value="list">列表</option>
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn" onclick="optimizePrompt()">✨ 优化 Prompt</button>
+
+            <div class="output-section">
+                <label>优化后的 Prompt：</label>
+                <div class="output-box" id="optimizedOutput">优化结果将显示在这里...</div>
+                <button class="copy-btn" onclick="copyResult()">📋 复制结果</button>
+            </div>
+
+            <div class="tips">
+                <h3>💡 使用小贴士：</h3>
+                <ul>
+                    <li>尽可能详细描述你的需求和背景信息</li>
+                    <li>明确指定输出的格式和长度要求</li>
+                    <li>提供具体的示例可以帮助 AI 更好地理解</li>
+                    <li>对于复杂任务，可以分步骤描述</li>
+                    <li>指定角色定位可以让回答更专业</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function optimizePrompt() {
+            const originalPrompt = document.getElementById('originalPrompt').value.trim();
+            const taskType = document.getElementById('taskType').value;
+            const tone = document.getElementById('tone').value;
+            const outputFormat = document.getElementById('outputFormat').value;
+
+            if (!originalPrompt) {
+                alert('请先输入原始 Prompt！');
+                return;
+            }
+
+            // 任务类型映射
+            const taskTypeMap = {
+                general: '通用任务',
+                writing: '文案写作',
+                analysis: '数据分析',
+                coding: '代码开发',
+                design: '设计方案',
+                marketing: '营销策划',
+                research: '行业研究'
+            };
+
+            // 语气风格映射
+            const toneMap = {
+                professional: '专业严谨',
+                friendly: '友好亲切',
+                concise: '简洁明了',
+                detailed: '详细全面',
+                creative: '创意活泼'
+            };
+
+            // 输出格式映射
+            const formatMap = {
+                text: '纯文本',
+                markdown: 'Markdown 格式',
+                table: '表格形式',
+                list: '列表形式',
+                json: 'JSON 格式'
+            };
+
+            // 生成优化后的 Prompt
+            const optimizedPrompt = `【角色设定】
+你是一位在${taskTypeMap[taskType]}领域的资深专家，拥有丰富的实战经验和专业知识。
+
+【任务背景】
+${originalPrompt}
+
+【具体要求】
+1. 请以${toneMap[tone]}的语气风格进行回答
+2. 输出格式要求：${formatMap[outputFormat]}
+3. 确保内容准确、逻辑清晰、结构完整
+4. 如有必要，请提供具体的案例或数据支持
+5. 避免使用过于专业的术语，确保内容易于理解
+
+【输出规范】
+- 开头简要说明核心观点
+- 主体部分分点阐述，层次分明
+- 结尾总结要点或提供行动建议
+- 如需引用数据或案例，请注明来源或说明假设条件
+
+请根据以上要求，为我提供专业、实用的解答。`;
+
+            document.getElementById('optimizedOutput').textContent = optimizedPrompt;
+        }
+
+        function copyResult() {
+            const result = document.getElementById('optimizedOutput').textContent;
+
+            if (result === '优化结果将显示在这里...') {
+                alert('请先生成优化结果！');
+                return;
+            }
+
+            navigator.clipboard.writeText(result).then(() => {
+                alert('✅ 已复制到剪贴板！');
+            }).catch(err => {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = result;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ 已复制到剪贴板！');
+            });
+        }
+    </script>
+</body>
+</html>
