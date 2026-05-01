@@ -1,0 +1,5 @@
+--- .gitignore (原始)
+
+
++++ .gitignore (修改后)
+Nothing should be ignored in this case, as the changes only include source/config files (README.md, prompt-optimizer.html) without any build artifacts, dependencies, or temporary files.
